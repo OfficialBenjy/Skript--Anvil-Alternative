@@ -3,20 +3,12 @@ command /anvilalt:
 		open chest inventory with 1 rows named "test" to player
 		set slot 4 of player's current inventory to barrier named "%{alt::test}%" with lore "click to change"
 
-
-on inventory click:
-	if name of event-inventory is "test":
-		if index of event-slot is 4:
-			set {alt::trigger} to true
-			set {alt::trigger::player} to player
-			send "&6&lType the new text in chat."
-			send "&6Old Text: %{alt::test}%"
-			close inventory of player
-
+#=========================================================================
+# This is all new.
 on chat:
-	if {alt::trigger} is true:
-		if {alt::trigger::player} is event-player:
+	loop all players:
+		if {alt::trigger::%loop-player%} is true:
 			set {alt::test} to message
 			send "&aThe variable has been changed."
 			cancel event
-			set {alt::trigger} to false
+			set {alt::trigger::%loop-player%} to false
